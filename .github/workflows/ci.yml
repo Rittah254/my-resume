@@ -1,27 +1,22 @@
-name: Resume CI Build
-
-on:
-  push:
+   name: Resume ci Build
+   on:
+   push:
     branches: [ "main" ]
-  pull_request:
+   pull_request:
     branches: [ "main" ]
-
-jobs:
-
-  build:
-
+   jobs:
+   build:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:${{github,run_number}}
-    - name: Build latest  
+    - name: Build the Docker image with tag
+      run: docker build . --file Dockerfile --tag my-image-name:${{github.run_number}}
+    - name: Build latest 
       run: docker build . --file Dockerfile --tag my-image-name
-    - name: Login  to Docker hub
-      run: docker log in -u ${{secrets. REGISTRY_USERNAME}} -P ${{secrets.REGISTRY_PASS}}
-    - name: Tag image
-      run: docker tag my-image-name:${{github.run_number}} ${{secrets.REGISTRY_USERNAME}}/myimage-name:${{github.run_number}}
-    - name: push name
+    - name: Login to Docker hub
+      run: docker login -u ${{secrets.REGISTRY_USERNAME}} -p ${{secrets.REGISTRY_PASS}}
+    - name: Tag image 
+      run: docker tag my-image-name:${{github.run_number}} ${{secrets.REGISTRY_USERNAME}}/my-image-name:${{github.run_number}}
+    - name: Push Image 
       run: docker push  ${{secrets.REGISTRY_USERNAME}}/my-image-name:${{github.run_number}}
-    
