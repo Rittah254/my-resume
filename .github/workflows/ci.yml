@@ -1,3 +1,4 @@
+  name: Resume CI Build
   on:
     push:
     branches: ["main"]
@@ -34,10 +35,10 @@
       - name: SSH to server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{secret.HOST}}
+          host: ${{secrets.HOST}}
           username: ${{vars.USERNAME}}
           key: ${{secrets.KEY}}
           script: |
-              docker stop resume || echo ""
-              docker rm resume || echo ""
-              docker run -d --name resume -p 8080:5001 ${{secrets.REGISTRY_USERNAME}}/my-image-name:${{github.run_number}}
+            docker stop resume || echo ""
+            docker rm resume || echo ""
+            docker run -d --name resume -p 8080:5001 ${{secrets.REGISTRY_USERNAME}}/my-image-name:${{github.run_number}}
