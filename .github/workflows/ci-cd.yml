@@ -10,8 +10,8 @@ permissions:
   id-token: write
   contents: read
 env:
-  AWS_REGION: us-east-1
-  AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
+ aws_region: us-east-1
+ AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
 
 
 jobs: 
@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: clone repo
         uses: actions/checkout@v3
-      - name: configure AWS credentials
+      - name: AWS confic cred
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE }} #OIDC
