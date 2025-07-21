@@ -1,4 +1,4 @@
-name: build push and deploy image
+name: Build, Push, and Deploy
 
 on:
   push:
@@ -6,25 +6,41 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  id-token: write
-  contents: read
 env:
   AWS_REGION: us-east-1
   AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
+  ECR_REPOSITORY: your-ecr-repo-name  # Replace with your actual ECR repo
 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for OIDC
+      contents: read    # Required for checkout
 
-jobs: 
-  build: 
-    runs-on: ubuntu-latest  # github runner
     steps:
-      - name: clone repo
+      # 1. Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: configure AWS credentials
+
+      # 2. Configure AWS credentials (FIXED TYPO HERE)
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.AWS_ROLE }} #OIDC
-          AWS_region: ${{ env.AWS_REGION }}
-      - name: Loging to ecr    
+          role-to-assume: ${{ env.AWS_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 3. Login to Amazon ECR
+      - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
-            
+
+      # 4. Build, tag, and push Docker image
+      - name: Build and Push
+        run: |
+          docker build -t $ECR_REPOSITORY:latest .
+          docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
+
+      # 5. (Optional) Add deployment steps (ECS, Lambda, etc.)
+      # - name: Deploy to ECS
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
