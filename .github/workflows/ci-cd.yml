@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: us-east-1
   AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
-  ECR_REPOSITORY: your-ecr-repo-name  # Replace with your actual ECR repo
+  
 
 jobs:
   build-and-deploy:
@@ -19,11 +19,9 @@ jobs:
       contents: read    # Required for checkout
 
     steps:
-      # 1. Checkout code
+      
       - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # 2. Configure AWS credentials (FIXED TYPO HERE)
+        uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -41,6 +39,4 @@ jobs:
           docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
 
-      # 5. (Optional) Add deployment steps (ECS, Lambda, etc.)
-      # - name: Deploy to ECS
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      
