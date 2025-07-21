@@ -9,6 +9,7 @@ on:
 permissions:
   id-token: write
   contents: read
+
 env:
   AWS_REGION: us-east-1
   AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
@@ -20,11 +21,11 @@ jobs:
     steps:
       - name: clone repo
         uses: actions/checkout@v3
-      - name: AWS confic cred
+      - name: AWS creds config
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE }} #OIDC
           aws_region: ${{ env.AWS_REGION }}
       - name: Loging to ecr    
         uses: aws-actions/amazon-ecr-login@v1
-            
+             
