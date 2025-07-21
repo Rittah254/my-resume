@@ -1,4 +1,4 @@
-name: Build, Push, and Deploy
+name: build push and deploy image
 
 on:
   push:
@@ -6,37 +6,25 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  id-token: write
+  contents: read
 env:
   AWS_REGION: us-east-1
   AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
-  
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write   # Required for OIDC
-      contents: read    # Required for checkout
 
+jobs: 
+  build: 
+    runs-on: ubuntu-latest  # github runner
     steps:
-      
-      - name: Checkout repository
+      - name: clone repo
         uses: actions/checkout@v3
-      - name: Configure AWS credentials
+      - name: configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.AWS_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      # 3. Login to Amazon ECR
-      - name: Login to ECR
+          role-to-assume: ${{ env.AWS_ROLE }} #OIDC
+          AWS_region: ${{ env.AWS_REGION }}
+      - name: Loging to ecr    
         uses: aws-actions/amazon-ecr-login@v1
-
-      # 4. Build, tag, and push Docker image
-      - name: Build and Push
-        run: |
-          docker build -t $ECR_REPOSITORY:latest .
-          docker tag $ECR_REPOSITORY:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
-
-      
+            
