@@ -21,7 +21,7 @@ on:
               uses: Aws-actions/configure-aws-ctedential@v4
               with:
                 role-to-assume: ${{ env.AWS_ROLE }} #OIDC
-                AWS_region: ${{ env.AWS_REGION}}
+                AWS_region: ${{ env.AWS_REGION }}
             - name: Loging to ecr    
               uses: aws-actions/amazon-ecr-login@v1
             
