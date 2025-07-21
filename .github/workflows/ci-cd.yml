@@ -10,8 +10,8 @@ permissions:
   id-token: write
   contents: read
 env:
- aws_region: us-east-1
- AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
+  AWS_ACTION_ROLE: us-east-1
+  AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
 
 
 jobs: 
