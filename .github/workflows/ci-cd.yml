@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest  # github runner
     steps:
       - name: clone repo
-        uses: actions/checkout@v3
-      - name: Aws cred config
-        uses: Aws-actions/configure-aws-credential@v4
+        uses: actions/checkout@v
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credential@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE }} #OIDC
           AWS_region: ${{ env.AWS_REGION }}
