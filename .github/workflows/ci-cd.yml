@@ -10,15 +10,14 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  AWS_REGION: us-east-1
-  AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
-
-
 jobs: 
   build: 
     runs-on: ubuntu-latest  # github runner
-    steps:
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
+steps:
       - name: clone repo
         uses: actions/checkout@v3
       - name: AWS creds config
